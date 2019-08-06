@@ -19,6 +19,7 @@ public class LinkedBookList {
 	public void add(Book b){
 		if (head == null) {
 			head = new BookNode(b);
+			return;
 		}
 		BookNode curr = head;
 		while (curr.getNext() != null) {
@@ -35,7 +36,7 @@ public class LinkedBookList {
 		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException("out of bounds");
 		}
-		if ( index == 0) {
+		if (index == 0) {
 			head = new BookNode(b, head);
 		}
 		else {
@@ -45,6 +46,7 @@ public class LinkedBookList {
 			}
 			curr.setNext(new BookNode(b, curr.getNext()));
 		}
+		size++;
 		return;
 	}
 	
@@ -54,7 +56,15 @@ public class LinkedBookList {
 		if (head == null) {
 			return null;
 		}
-		return null;
+		BookNode curr = head;
+		while (!curr.getNext().getBook().equals(b)) {
+			curr = curr.getNext();
+		}
+		
+		Book  returnBook = curr.getNext().getBook();
+		curr.setNext(curr.getNext().getNext());
+		size--;
+		return returnBook;
 	}
 
 	//IMPLEMENT -- removes a book at a specific index and returns it, 
@@ -67,7 +77,12 @@ public class LinkedBookList {
 		for(int i = 0; i < index-1; i++) {
 			curr = curr.getNext();
 		}
-		Book  returnBook = curr.getNext().getNext().getBook();
+		if (index == 0) {
+			Book ret = head.getBook();
+			head = head.getNext();
+			return ret;
+		}
+		Book  returnBook = curr.getNext().getBook();
 		curr.setNext(curr.getNext().getNext());
 		size--;
 		return returnBook;
